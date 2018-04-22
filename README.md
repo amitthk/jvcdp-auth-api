@@ -1,11 +1,12 @@
-# Jvcdp spring boot api starters
+# Jvcdp spring boot api for simple jwt authentication filter
 
-Kick starters for:
+Toolset Used:
 
-* Springboot
-* Flyway
+* Spring boot
+* Springframework security
+* Liquibase
 * JPA
 * Swagger
 * PostgreSQL
-* Liquibase
-* Mybatis (upcoming - separate branch)
+* Jsonwebtoken
+* Mybatis (separate branch)
