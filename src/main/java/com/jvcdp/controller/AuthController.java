@@ -1,10 +1,7 @@
 package com.jvcdp.controller;
 
 import com.jvcdp.common.Utility;
-import com.jvcdp.model.AccountCredentials;
-import com.jvcdp.model.AppUser;
-import com.jvcdp.model.EmailExistsException;
-import com.jvcdp.model.InvalidCredentialsException;
+import com.jvcdp.model.*;
 import com.jvcdp.repository.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,9 +25,10 @@ public class AuthController {
     }
 
 	@RequestMapping(value="/login", method=RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String login(@RequestBody AccountCredentials AppUser) throws AuthenticationException{
+	public String login(@RequestBody AccountCredentials appUser) throws AuthenticationException{
 
-		if(Utility.authenticate(applicationUserRepository, AppUser.getUserName(), AppUser.getPassword())){
+		if(Utility.authenticate(applicationUserRepository, appUser.getUserName(), appUser.getPassword())){
+		    //Update the login timestamp here
 			return ("Login Successfull!");
 		}else{
 			throw new InvalidCredentialsException("Unable to login!");
@@ -38,19 +36,24 @@ public class AuthController {
 	}
 
 	@RequestMapping(value="/register", method=RequestMethod.PUT,consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public AppUser register(@Valid @RequestBody AccountCredentials AppUser) throws Exception{
-		if(null!=applicationUserRepository.getApplicationUsersByUserName((AppUser.getUserName()))){
+	public AppUser register(@Valid @RequestBody AccountCredentials appUser) throws AuthenticationException{
+		if(applicationUserRepository.countApplicationUsersByEmail((appUser.getEmailAddress()))>0){
 			throw new EmailExistsException("There is an account with that email address");
 		}
+
+		if(applicationUserRepository.countApplicationUsersByUserName(appUser.getUserName())>0){
+		    throw new UserNameAlreadyAllotted("This UserName is already taken!");
+        }
+
 		try{
 			AppUser newUser= new AppUser();
-			newUser.setUserName(AppUser.getUserName());
-			newUser.setEmail(AppUser.getUserName());
-			newUser.setApiId(AppUser.getApiId());
+			newUser.setUserName(appUser.getUserName());
+			newUser.setEmail(appUser.getEmailAddress());
+			newUser.setApiId(appUser.getApiId());
 
 			//Password hashing
 			String salt =Utility.getRandomHash();
-			newUser.setPasswordHash(Utility.md5Hash(AppUser.getPassword(), salt));
+			newUser.setPasswordHash(Utility.md5Hash(appUser.getPassword(), salt));
 			newUser.setSalt(salt);
 			newUser= applicationUserRepository.saveAndFlush(newUser);
 			return(newUser);

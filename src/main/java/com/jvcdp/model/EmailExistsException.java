@@ -1,6 +1,8 @@
 package com.jvcdp.model;
 
-public class EmailExistsException extends Exception {
+import org.springframework.security.core.AuthenticationException;
+
+public class EmailExistsException extends AuthenticationException {
 	private static final long serialVersionUID = 8091345514446751786L;
 
 	public EmailExistsException(String msg) {

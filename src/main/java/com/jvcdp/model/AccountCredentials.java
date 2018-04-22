@@ -7,11 +7,15 @@ import com.jvcdp.model.validation.ValidEmail;
 
 public class AccountCredentials {
 	@NotNull
-	@ValidEmail
+	@Size(min=6,max = 255)
 	private String userName;
 	
 	@NotNull
 	private String password;
+
+	@NotNull
+	@ValidEmail
+	private String emailAddress;
 	
 	@NotNull
 	@Size(min=3,max=255)
@@ -48,4 +52,11 @@ public class AccountCredentials {
 		this.password = password;
 	}
 
+	public String getEmailAddress() {
+		return emailAddress;
 	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+}
