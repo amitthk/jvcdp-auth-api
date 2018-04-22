@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+<changeSet author="devakthk" id="1">
+<sql dbms="postgresql">
+  CREATE SCHEMA user_api
+</sql>
+</changeSet>
+
+<changeSet author="devakthk" id="2">
+    <sql dbms="h2"
+            endDelimiter=";"
+            splitStatements="true"
+            stripComments="true">
+            DROP TABLE USERINFO IF EXISTS;
+	CREATE TABLE USERINFO (
+	ID BIGINT auto_increment PRIMARY KEY,
+   	NAME VARCHAR(255),
+	USERNAME VARCHAR(255),EMAIL VARCHAR(255),PASSWORDHASH VARCHAR(255),SALT VARCHAR(255), CREATEDATE DATE, LASTLOGIN DATE,LASTUPDATE DATE, PROJECTID VARCHAR(255));
+    </sql>
+    
+	<sql dbms="postgresql"
+	            endDelimiter=";"
+	            splitStatements="true"
+	            stripComments="true">
+	CREATE TABLE IF NOT EXISTS USERINFO (
+	ID BIGSERIAL PRIMARY KEY,
+	NAME VARCHAR(255),
+	USERNAME VARCHAR(255),
+	EMAIL VARCHAR(255),
+	PASSWORDHASH VARCHAR(255),
+	SALT VARCHAR(255), 
+	CREATEDATE DATE, 
+	LASTLOGIN DATE,
+	LASTUPDATE DATE, 
+	PROJECTID VARCHAR(255));
+	    </sql>
+</changeSet>
+        
+</databaseChangeLog>
